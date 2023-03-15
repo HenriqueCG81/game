@@ -2,7 +2,7 @@ const canvas = document.getElementById('pacman');
 const ctx = canvas.getContext('2d');
 
 const ghost = new Plane();
-
+const obstacle = new Obstacle();
 // we'll listen to the keys being pressed and
 // call the ghost methods accordingly
 document.addEventListener('keydown', event => {
@@ -22,6 +22,9 @@ document.addEventListener('keydown', event => {
     case 'ArrowRight':
       ghost.moveRight();
       break;
+    case ' ':
+      bullets.push(new Bullet(ghost.x, ghost.y));
+      break;
   }
 
   // updateCanvas();
@@ -34,7 +37,17 @@ function updateCanvas() {
   if (ghost.loaded) {
     ghost.draw();
   }
+  bullets.forEach(bullet => {
+    bullet.draw();
+  });
 
+  obstacles.forEach(obstacle => {
+    if (obstacle.loaded) {
+      obstacle.draw();
+    }
+  });
+
+  updateBullets();
   requestAnimationFrame(updateCanvas);
 }
 
@@ -47,5 +60,13 @@ backgroundImage.addEventListener('load', () => {
   background = new Background(backgroundImage);
   updateCanvas();
 });
-const game = new Game(ghost);
-game.start();
+
+function updateBullets() {
+  bullets.forEach(bullet => {
+    bullet.move();
+    if (bullet.x > canvas.width) {
+      // remove a bala quando ela sai da tela
+      bullets.splice(bullets.indexOf(bullet), 1);
+    }
+  });
+}

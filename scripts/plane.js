@@ -36,18 +36,22 @@ class Plane {
     ctx.drawImage(this.img, this.x, this.y, 50, 50);
   }
 }
-
-class Game {
-  constructor(ghost) {
-    this.ghost = ghost;
-    this.interval = undefined;
-    this.collision = 0;
-    this.obstacles = [];
+class Bullet {
+  constructor(x, y) {
+    this.x = x + 45;
+    this.y = y + 25;
+    this.speed = 3;
+    this.width = 12;
+    this.height = 3;
   }
-  start = () => {
-    this.interval = setInterval(this.updateGameArea, 20);
-  };
-  stop = () => {
-    clearInterval(this.interval);
-  };
+
+  move() {
+    this.x += this.speed;
+  }
+
+  draw() {
+    ctx.fillStyle = 'red';
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+  }
 }
+const bullets = [];
