@@ -4,19 +4,20 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/stylesheets/styles.css" />
+    <link rel="stylesheet" href="/stylessheets/styles.css" />
     <title>Canvas Pacman</title>
   </head>
   <body>
-    <canvas id="pacman" width="600" height="600"></canvas>
+    <canvas id="pacman" width="800" height="550"></canvas>
     <audio
       id="myAudio"
       src="/trapped-in-the-box-quarantine-dance-instrumental-confinement-142468.mp3"
     ></audio>
     <div class="placar">
-      <p id="timer">Time: 0</p>
+      <p id="timer">Timer: 0</p>
       <p id="score">Score: 0</p>
-      <button><form action="reset">Restart</form></button>
+
+      <button id="reset"><form action="reset">Start</form></button>
       <button id="muteButton">Mute Music</button>
     </div>
     <script src="/scripts/background.js"></script>

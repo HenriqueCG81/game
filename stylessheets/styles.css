@@ -3,5 +3,55 @@ canvas {
 }
 
 .placar {
-  display: contents;
+  display: flex;
+  justify-content: center;
+  justify-content: space-around;
+  align-items: center;
+  background-color: gold;
+  width: 800px;
+  height: 60px;
+  border: 2px solid red;
+  margin: 0, 20, 0, 20;
+}
+
+@keyframes timer {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+#timer {
+  -webkit-animation: timer 0.75s linear infinite;
+  -moz-animation: timer 0.75s linear infinite;
+  -ms-animation: timer 0.75s linear infinite;
+  -o-animation: timer 0.75s linear infinite;
+  animation: timer 0.75s linear infinite;
+  color: red;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 20px;
+}
+
+#score {
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 30px;
+  color: #080808;
+}
+#reset {
+  font-size: 40px;
+  color: blue;
+  background-color: cyan;
+  border-radius: 30%;
+}
+#muteButton {
+  opacity: 0.6;
+  background-color: goldenrod;
+  border-radius: 30%;
+  width: 60px;
 }

@@ -1,26 +1,22 @@
-const canvas = document.getElementById('pacman');
-const ctx = canvas.getContext('2d');
-let secondsLeft = 30000;
-const ghost = new Plane();
-const myAudio = document.getElementById('myAudio');
-myAudio.play();
-let score = 0;
-let gameOver = false;
 const restartButton = document.querySelector('button');
 restartButton.addEventListener('click', () => {
   location.reload();
 });
 
-const muteButton = document.getElementById('muteButton');
-const music = new Audio(
-  '/trapped-in-the-box-quarantine-dance-instrumental-confinement-142468.mp3'
-);
+const canvas = document.getElementById('pacman');
+const ctx = canvas.getContext('2d');
+
+let secondsLeft = 30000;
+const ghost = new Plane();
+let score = 0;
+let gameOver = false;
+
 function displayGameOver() {
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = 'red';
-  ctx.font = '60px Arial';
-  ctx.fillText('Game Over', canvas.width / 2 - 150, canvas.height / 2);
+  ctx.font = '90px monospace';
+  ctx.fillText('Game Over', canvas.width / 2 - 200, canvas.height / 2);
   clearInterval(intervalId);
 }
 
@@ -29,7 +25,7 @@ function startTimer() {
   intervalId = setInterval(() => {
     if (secondsLeft > 0) {
       secondsLeft -= 1;
-      document.getElementById('timer').textContent = `Time: ${Math.floor(
+      document.getElementById('timer').textContent = `Timer: ${Math.floor(
         secondsLeft / 1000
       )}`;
     } else {
@@ -112,16 +108,17 @@ backgroundImage.src =
 backgroundImage.addEventListener('load', () => {
   background = new Background(backgroundImage);
 
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 25; i++) {
     let x, y;
     do {
-      x = Math.floor(Math.random() * canvas.width);
+      x = Math.floor(Math.random() * canvas.width + 80);
       y = Math.floor(Math.random() * canvas.height);
     } while (
       x < ghost.x + ghost.width &&
       x + Obstacle.width > ghost.x &&
       y < ghost.y + ghost.height &&
-      y + Obstacle.height > ghost.y
+      y + Obstacle.height > ghost.y &&
+      Obstacle.x > 100
     );
     {
     }
