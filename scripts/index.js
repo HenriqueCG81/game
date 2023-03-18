@@ -1,10 +1,60 @@
 const canvas = document.getElementById('pacman');
 const ctx = canvas.getContext('2d');
-
+let secondsLeft = 30000;
 const ghost = new Plane();
-const obstacle = new Obstacle();
-// we'll listen to the keys being pressed and
-// call the ghost methods accordingly
+const myAudio = document.getElementById('myAudio');
+myAudio.play();
+let score = 0;
+let gameOver = false;
+const restartButton = document.querySelector('button');
+restartButton.addEventListener('click', () => {
+  location.reload();
+});
+
+const muteButton = document.getElementById('muteButton');
+const music = new Audio(
+  '/trapped-in-the-box-quarantine-dance-instrumental-confinement-142468.mp3'
+);
+function displayGameOver() {
+  ctx.fillStyle = 'black';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = 'red';
+  ctx.font = '60px Arial';
+  ctx.fillText('Game Over', canvas.width / 2 - 150, canvas.height / 2);
+  clearInterval(intervalId);
+}
+
+let intervalId;
+function startTimer() {
+  intervalId = setInterval(() => {
+    if (secondsLeft > 0) {
+      secondsLeft -= 1;
+      document.getElementById('timer').textContent = `Time: ${Math.floor(
+        secondsLeft / 1000
+      )}`;
+    } else {
+      clearInterval(intervalId);
+      gameOver = true;
+      displayGameOver();
+    }
+  }, 1000);
+  obstacles.forEach(obstacle => {
+    if (obstacle.loaded) {
+      obstacle.draw();
+    }
+    if (
+      ghost.x < obstacle.x + obstacle.width &&
+      ghost.x + 50 > obstacle.x &&
+      ghost.y < obstacle.y + obstacle.height &&
+      ghost.y + 50 > obstacle.y
+    ) {
+      clearInterval(intervalId);
+      gameOver = true;
+      displayGameOver();
+    }
+  });
+}
+
 document.addEventListener('keydown', event => {
   event.preventDefault();
   switch (event.key) {
@@ -41,14 +91,17 @@ function updateCanvas() {
     bullet.draw();
   });
 
-  obstacles.forEach(obstacle => {
-    if (obstacle.loaded) {
-      obstacle.draw();
-    }
-  });
-
   updateBullets();
-  requestAnimationFrame(updateCanvas);
+
+  obstacles.forEach(obstacle => {
+    obstacle.move();
+    obstacle.draw();
+  });
+  document.getElementById('score').textContent = `Score: ${score}`;
+  startTimer();
+  if (!gameOver) {
+    requestAnimationFrame(updateCanvas);
+  }
 }
 
 let background;
@@ -58,6 +111,24 @@ backgroundImage.src =
 
 backgroundImage.addEventListener('load', () => {
   background = new Background(backgroundImage);
+
+  for (let i = 0; i < 15; i++) {
+    let x, y;
+    do {
+      x = Math.floor(Math.random() * canvas.width);
+      y = Math.floor(Math.random() * canvas.height);
+    } while (
+      x < ghost.x + ghost.width &&
+      x + Obstacle.width > ghost.x &&
+      y < ghost.y + ghost.height &&
+      y + Obstacle.height > ghost.y
+    );
+    {
+    }
+
+    obstacles.push(new Obstacle(x, y));
+  }
+
   updateCanvas();
 });
 
@@ -65,8 +136,22 @@ function updateBullets() {
   bullets.forEach(bullet => {
     bullet.move();
     if (bullet.x > canvas.width) {
-      // remove a bala quando ela sai da tela
       bullets.splice(bullets.indexOf(bullet), 1);
+    } else {
+      obstacles.forEach(obstacle => {
+        if (obstacle.loaded) {
+          if (
+            bullet.x < obstacle.x + obstacle.width &&
+            bullet.x + bullet.width > obstacle.x &&
+            bullet.y < obstacle.y + obstacle.height &&
+            bullet.y + bullet.height > obstacle.y
+          ) {
+            bullets.splice(bullets.indexOf(bullet), 1);
+            obstacles.splice(obstacles.indexOf(obstacle), 1);
+            score += 10;
+          }
+        }
+      });
     }
   });
 }

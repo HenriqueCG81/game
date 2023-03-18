@@ -1,5 +1,4 @@
 class Plane {
-  // this will be the starting position of our ghost
   constructor() {
     this.x = 25;
     this.y = 25;
@@ -7,7 +6,6 @@ class Plane {
 
     const img = new Image();
     img.addEventListener('load', () => {
-      // once the image is loaded, draw it
       this.loaded = true;
       this.img = img;
       this.draw();
@@ -36,6 +34,7 @@ class Plane {
     ctx.drawImage(this.img, this.x, this.y, 50, 50);
   }
 }
+
 class Bullet {
   constructor(x, y) {
     this.x = x + 45;
@@ -54,4 +53,43 @@ class Bullet {
     ctx.fillRect(this.x, this.y, this.width, this.height);
   }
 }
+
 const bullets = [];
+
+const obstacles = [];
+class Obstacle {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.width = 30;
+    this.height = 40;
+    this.loaded = false;
+    this.direction = 'down';
+    const img = new Image();
+    img.addEventListener('load', () => {
+      this.loaded = true;
+      this.img = img;
+      this.draw();
+    });
+    img.src = '/alien-in-spaceship.gif';
+  }
+  draw() {
+    if (this.loaded) {
+      ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    }
+  }
+
+  move() {
+    if (this.direction === 'down') {
+      this.y += 1;
+      if (this.y + this.height >= canvas.height) {
+        this.direction = 'up';
+      }
+    } else {
+      this.y -= 1;
+      if (this.y <= 0) {
+        this.direction = 'down';
+      }
+    }
+  }
+}

@@ -9,8 +9,16 @@
   </head>
   <body>
     <canvas id="pacman" width="600" height="600"></canvas>
-    <!-- we need access to the ghost code inside index.js so we place
-    ghost on top of index -->
+    <audio
+      id="myAudio"
+      src="/trapped-in-the-box-quarantine-dance-instrumental-confinement-142468.mp3"
+    ></audio>
+    <div class="placar">
+      <p id="timer">Time: 0</p>
+      <p id="score">Score: 0</p>
+      <button><form action="reset">Restart</form></button>
+      <button id="muteButton">Mute Music</button>
+    </div>
     <script src="/scripts/background.js"></script>
     <script src="/scripts/plane.js"></script>
     <script src="/scripts/index.js"></script>

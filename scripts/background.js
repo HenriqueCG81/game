@@ -25,30 +25,3 @@ class Background {
     this.draw();
   }
 }
-const obstacles = [];
-class Obstacle {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.width = 30;
-    this.height = 40;
-    this.loaded = false;
-
-    const img = new Image();
-    img.addEventListener('load', () => {
-      this.loaded = true;
-      this.img = img;
-      this.draw();
-    });
-    img.src = '/alien-in-spaceship.gif';
-  }
-  draw() {
-    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-  }
-}
-
-for (let i = 0; i < 10; i++) {
-  const x = Math.floor(Math.random() * canvas.width);
-  const y = Math.floor(Math.random() * canvas.height);
-  obstacles.push(new Obstacle(x, y));
-}
