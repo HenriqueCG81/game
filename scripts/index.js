@@ -1,15 +1,19 @@
-const restartButton = document.querySelector('button');
+const startButton = document.getElementById('start');
+startButton.addEventListener('click', () => {
+  updateCanvas();
+});
+const restartButton = document.getElementById('reset');
 restartButton.addEventListener('click', () => {
   location.reload();
 });
-
 const canvas = document.getElementById('pacman');
 const ctx = canvas.getContext('2d');
-
-let secondsLeft = 30000;
 const ghost = new Plane();
-let score = 0;
 let gameOver = false;
+let secondsLeft = 30000;
+let score = 0;
+
+let bulletCount = 0;
 
 function displayGameOver() {
   ctx.fillStyle = 'black';
@@ -49,33 +53,50 @@ function startTimer() {
       displayGameOver();
     }
   });
+  if (bulletCount >= 20) {
+    clearInterval(intervalId);
+    gameOver = true;
+    displayGameOver();
+  }
 }
 
 document.addEventListener('keydown', event => {
   event.preventDefault();
   switch (event.key) {
     case 'ArrowUp':
-      if (ghost.y > 0) {
+      if (ghost.y > 10) {
         ghost.moveUp();
+        break;
       }
-      break;
+
     case 'ArrowDown':
-      ghost.moveDown();
-      break;
+      if (ghost.y < 500) {
+        ghost.moveDown();
+        break;
+      }
     case 'ArrowLeft':
-      ghost.moveLeft();
-      break;
+      if (ghost.x > 0) {
+        ghost.moveLeft();
+        break;
+      }
     case 'ArrowRight':
       ghost.moveRight();
       break;
     case ' ':
-      bullets.push(new Bullet(ghost.x, ghost.y));
+      if (bulletCount < 21) {
+        bullets.push(new Bullet(ghost.x, ghost.y));
+        bulletCount++;
+        tiro.currentTime = 0;
+        tiro.play();
+        document.getElementById(
+          'bullet-count'
+        ).textContent = `Bullets: ${bulletCount} / 20.`;
+      }
       break;
   }
 
   // updateCanvas();
 });
-
 function updateCanvas() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   background.updateBackground();
@@ -107,7 +128,6 @@ backgroundImage.src =
 
 backgroundImage.addEventListener('load', () => {
   background = new Background(backgroundImage);
-
   for (let i = 0; i < 25; i++) {
     let x, y;
     do {
@@ -125,13 +145,12 @@ backgroundImage.addEventListener('load', () => {
 
     obstacles.push(new Obstacle(x, y));
   }
-
-  updateCanvas();
 });
 
 function updateBullets() {
   bullets.forEach(bullet => {
     bullet.move();
+
     if (bullet.x > canvas.width) {
       bullets.splice(bullets.indexOf(bullet), 1);
     } else {
@@ -143,6 +162,12 @@ function updateBullets() {
             bullet.y < obstacle.y + obstacle.height &&
             bullet.y + bullet.height > obstacle.y
           ) {
+            bullet.hit = true;
+            if (!bulletSound.paused) {
+              bulletSound.pause();
+              bulletSound.currentTime = 0;
+            }
+            bulletSound.play();
             bullets.splice(bullets.indexOf(bullet), 1);
             obstacles.splice(obstacles.indexOf(obstacle), 1);
             score += 10;

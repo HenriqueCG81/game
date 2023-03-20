@@ -35,13 +35,20 @@ canvas {
   font-weight: bold;
   font-family: monospace;
   font-size: 20px;
+  border: 2px solid red;
+  border-radius: 30%;
+  background-color: aqua;
 }
 
 #score {
   font-weight: bold;
   font-family: monospace;
   font-size: 30px;
-  color: #080808;
+  color: rgb(177, 9, 244);
+  border: 2px solid rgb(177, 9, 244);
+  border-radius: 30%;
+  background-color: cyan;
+  margin: 10px;
 }
 #reset {
   font-size: 40px;
@@ -54,4 +61,24 @@ canvas {
   background-color: goldenrod;
   border-radius: 30%;
   width: 60px;
+}
+
+#bullet-count {
+  font-size: 20px;
+  font-weight: bold;
+  border: 2px solid black;
+  border-radius: 25%;
+  background-color: bisque;
+}
+#comeco {
+  display: flex;
+  position: absolute;
+  width: 800px;
+  height: 550px;
+  flex-direction: column;
+  font-size: 30px;
+}
+
+.hidden {
+  display: none;
 }

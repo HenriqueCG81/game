@@ -42,6 +42,7 @@ class Bullet {
     this.speed = 3;
     this.width = 12;
     this.height = 3;
+    this.hit = false;
   }
 
   move() {
@@ -81,12 +82,12 @@ class Obstacle {
 
   move() {
     if (this.direction === 'down') {
-      this.y += 1;
+      this.y += 2;
       if (this.y + this.height >= canvas.height) {
         this.direction = 'up';
       }
     } else {
-      this.y -= 1;
+      this.y -= 2;
       if (this.y <= 0) {
         this.direction = 'down';
       }

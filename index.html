@@ -4,21 +4,28 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/stylessheets/styles.css" />
+
+    <link rel="stylesheet" href="./stylessheets/styles.css" />
     <title>Canvas Pacman</title>
   </head>
   <body>
+    <div>
+      <button id="start"><form action="reset">Start</form></button>
+    </div>
     <canvas id="pacman" width="800" height="550"></canvas>
     <audio
-      id="myAudio"
-      src="/trapped-in-the-box-quarantine-dance-instrumental-confinement-142468.mp3"
+      id="bulletSound"
+      src="./salamisound-6732181-sfx-explosion-hit-3.mp3"
+    ></audio>
+    <audio
+      id="tiro"
+      src="./salamisound-2631813-sfx-laser-gun-12-games.mp3"
     ></audio>
     <div class="placar">
-      <p id="timer">Timer: 0</p>
+      <p id="timer">Timer: 30</p>
       <p id="score">Score: 0</p>
-
-      <button id="reset"><form action="reset">Start</form></button>
-      <button id="muteButton">Mute Music</button>
+      <p id="bullet-count">Bullets: 0</p>
+      <button id="reset"><form action="reset">restart</form></button>
     </div>
     <script src="/scripts/background.js"></script>
     <script src="/scripts/plane.js"></script>
