@@ -1,6 +1,7 @@
 const startButton = document.getElementById('start');
 startButton.addEventListener('click', () => {
   updateCanvas();
+  startButton.classList.add('hidden');
 });
 const restartButton = document.getElementById('reset');
 restartButton.addEventListener('click', () => {
@@ -10,7 +11,7 @@ const canvas = document.getElementById('pacman');
 const ctx = canvas.getContext('2d');
 const ghost = new Plane();
 let gameOver = false;
-let secondsLeft = 30000;
+let secondsLeft = 60000;
 let score = 0;
 
 let bulletCount = 0;
@@ -140,8 +141,6 @@ backgroundImage.addEventListener('load', () => {
       y + Obstacle.height > ghost.y &&
       Obstacle.x > 100
     );
-    {
-    }
 
     obstacles.push(new Obstacle(x, y));
   }

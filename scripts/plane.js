@@ -39,7 +39,7 @@ class Bullet {
   constructor(x, y) {
     this.x = x + 45;
     this.y = y + 25;
-    this.speed = 3;
+    this.speed = 2;
     this.width = 12;
     this.height = 3;
     this.hit = false;
@@ -91,6 +91,30 @@ class Obstacle {
       if (this.y <= 0) {
         this.direction = 'down';
       }
+    }
+  }
+}
+
+const addBullets = [];
+
+class addBullet {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.width = 20;
+    this.height = 30;
+    this.loaded = false;
+    const img = new Image();
+    img.addEventListener('load', () => {
+      this.loaded = true;
+      this.img = img;
+      this.draw();
+    });
+    img.src = '/caixamunicao.png';
+  }
+  draw() {
+    if (this.loaded) {
+      ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
   }
 }

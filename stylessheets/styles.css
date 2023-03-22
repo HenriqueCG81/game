@@ -51,16 +51,10 @@ canvas {
   margin: 10px;
 }
 #reset {
-  font-size: 40px;
-  color: blue;
+  font-size: 15px;
+  color: rgb(0, 0, 0);
   background-color: cyan;
   border-radius: 30%;
-}
-#muteButton {
-  opacity: 0.6;
-  background-color: goldenrod;
-  border-radius: 30%;
-  width: 60px;
 }
 
 #bullet-count {
@@ -78,7 +72,45 @@ canvas {
   flex-direction: column;
   font-size: 30px;
 }
-
+#First-screen {
+  display: flex;
+  justify-content: space-around;
+}
+#start {
+  position: absolute;
+  width: 800px;
+  height: 550px;
+  background-color: gold;
+  background-image: linear-gradient(
+      to bottom,
+      rgba(255, 255, 0, 0.5),
+      rgb(237, 222, 12)
+    ),
+    url('/alien-in-spaceship.gif');
+}
 .hidden {
   display: none;
+}
+h1 {
+  font-size: 80px;
+  border: 2px solid purple;
+  background-color: blueviolet;
+  font-weight: bold;
+  font-family: monospace;
+  margin-bottom: 80px;
+  animation: timer 0.95s linear infinite;
+}
+h2 {
+  color: rgb(238, 8, 8);
+  font-weight: bolder;
+  font-family: monospace;
+  margin-top: 17%;
+  animation: timer 0.95s linear infinite;
+}
+span {
+  font-weight: bolder;
+  font-family: monospace;
+  font-size: 20px;
+  color: blue;
+  display: relative;
 }
