@@ -1,3 +1,10 @@
+showWelcomeMessage();
+
+function showWelcomeMessage() {
+  const name = prompt('Digite seu nome:');
+  const message = 'Welcome to the experience River Space, ' + name + '!';
+  document.getElementById('welcome-message').innerHTML = message;
+}
 const startButton = document.getElementById('start');
 startButton.addEventListener('click', () => {
   updateCanvas();
@@ -10,18 +17,21 @@ restartButton.addEventListener('click', () => {
 const canvas = document.getElementById('pacman');
 const ctx = canvas.getContext('2d');
 const ghost = new Plane();
+const ammoSound = document.getElementById('ammoSound');
+const bulletSound = document.getElementById('bulletSound');
+
 let gameOver = false;
 let secondsLeft = 60000;
 let score = 0;
-
-let bulletCount = 0;
+let bulletCount = 20;
 
 function displayGameOver() {
   ctx.fillStyle = 'black';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = 'red';
   ctx.font = '90px monospace';
-  ctx.fillText('Game Over', canvas.width / 2 - 200, canvas.height / 2);
+  ctx.fillText(`Game Over`, canvas.width / 2 - 200, canvas.height / 2);
+
   clearInterval(intervalId);
 }
 
@@ -54,11 +64,6 @@ function startTimer() {
       displayGameOver();
     }
   });
-  if (bulletCount >= 20) {
-    clearInterval(intervalId);
-    gameOver = true;
-    displayGameOver();
-  }
 }
 
 document.addEventListener('keydown', event => {
@@ -84,14 +89,14 @@ document.addEventListener('keydown', event => {
       ghost.moveRight();
       break;
     case ' ':
-      if (bulletCount < 21) {
+      if (bulletCount) {
         bullets.push(new Bullet(ghost.x, ghost.y));
-        bulletCount++;
+        bulletCount--;
         tiro.currentTime = 0;
         tiro.play();
         document.getElementById(
           'bullet-count'
-        ).textContent = `Bullets: ${bulletCount} / 20.`;
+        ).textContent = `Bullets: ${bulletCount}.`;
       }
       break;
   }
@@ -114,6 +119,9 @@ function updateCanvas() {
   obstacles.forEach(obstacle => {
     obstacle.move();
     obstacle.draw();
+  });
+  ammoBoxes.forEach(ammobox => {
+    ammobox.draw();
   });
   document.getElementById('score').textContent = `Score: ${score}`;
   startTimer();
@@ -139,17 +147,36 @@ backgroundImage.addEventListener('load', () => {
       x + Obstacle.width > ghost.x &&
       y < ghost.y + ghost.height &&
       y + Obstacle.height > ghost.y &&
-      Obstacle.x > 100
+      Obstacle.x > 100 &&
+      Obstacle.x < 750 &&
+      Obstacle.y < 550
     );
 
     obstacles.push(new Obstacle(x, y));
+  }
+  for (let i = 0; i < 5; i++) {
+    let x, y;
+    do {
+      x = Math.floor(Math.random() * canvas.width + 80);
+      y = Math.floor(Math.random() * canvas.height);
+    } while (
+      x < ghost.x + ghost.width &&
+      x + AmmoBox.width > ghost.x &&
+      y < ghost.y + ghost.height &&
+      y + AmmoBox.height > ghost.y &&
+      AmmoBox.x > 100 &&
+      AmmoBox.x < 750 &&
+      AmmoBox.y < 550
+    );
+
+    ammoBoxes.push(new AmmoBox(x, y));
   }
 });
 
 function updateBullets() {
   bullets.forEach(bullet => {
     bullet.move();
-
+    0;
     if (bullet.x > canvas.width) {
       bullets.splice(bullets.indexOf(bullet), 1);
     } else {
@@ -174,5 +201,27 @@ function updateBullets() {
         }
       });
     }
+    ammoBoxes.forEach(ammobox => {
+      if (
+        bullet.x < ammobox.x + ammobox.width &&
+        bullet.x + bullet.width > ammobox.x &&
+        bullet.y < ammobox.y + ammobox.height &&
+        bullet.y + bullet.height > ammobox.y
+      ) {
+        bullet.hit = true;
+        if (!bulletSound.paused) {
+          bulletSound.pause();
+          bulletSound.currentTime = 0;
+        }
+        bulletSound.play();
+        ammoSound.play();
+        bullets.splice(bullets.indexOf(bullet), 1);
+        ammoBoxes.splice(ammoBoxes.indexOf(ammobox), 1);
+        bulletCount += 5;
+        document.getElementById(
+          'bullet-count'
+        ).textContent = `Bullets: ${bulletCount}.`;
+      }
+    });
   });
 }

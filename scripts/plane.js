@@ -94,15 +94,13 @@ class Obstacle {
     }
   }
 }
-
-const addBullets = [];
-
-class addBullet {
+const ammoBoxes = [];
+class AmmoBox {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.width = 20;
-    this.height = 30;
+    this.width = 25;
+    this.height = 25;
     this.loaded = false;
     const img = new Image();
     img.addEventListener('load', () => {
@@ -110,8 +108,10 @@ class addBullet {
       this.img = img;
       this.draw();
     });
-    img.src = '/caixamunicao.png';
+
+    img.src = '/amunition.png';
   }
+
   draw() {
     if (this.loaded) {
       ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
