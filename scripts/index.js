@@ -1,15 +1,9 @@
-showWelcomeMessage();
-
-function showWelcomeMessage() {
-  const name = prompt('Digite seu nome:');
-  const message = 'Welcome to the experience River Space, ' + name + '!';
-  document.getElementById('welcome-message').innerHTML = message;
-}
 const startButton = document.getElementById('start');
 startButton.addEventListener('click', () => {
   updateCanvas();
   startButton.classList.add('hidden');
 });
+const playerName = prompt('Digite seu nome:');
 const restartButton = document.getElementById('reset');
 restartButton.addEventListener('click', () => {
   location.reload();
@@ -19,11 +13,15 @@ const ctx = canvas.getContext('2d');
 const ghost = new Plane();
 const ammoSound = document.getElementById('ammoSound');
 const bulletSound = document.getElementById('bulletSound');
-
 let gameOver = false;
 let secondsLeft = 60000;
 let score = 0;
 let bulletCount = 20;
+let highScores = [
+  { name: 'john', score: 130 },
+  { name: 'Carol', score: 180 },
+  { name: 'Joana', score: 70 }
+];
 
 function displayGameOver() {
   ctx.fillStyle = 'black';
@@ -31,7 +29,17 @@ function displayGameOver() {
   ctx.fillStyle = 'red';
   ctx.font = '90px monospace';
   ctx.fillText(`Game Over`, canvas.width / 2 - 200, canvas.height / 2);
-
+  highScores.push({ name: playerName, score });
+  highScores.sort((a, b) => b.score - a.score);
+  highScores = highScores.slice(0, 3);
+  let highScoresMessage = 'High Scores:\n';
+  highScores.forEach((highScore, index) => {
+    highScoresMessage += `${index + 1}. ${highScore.name}: ${
+      highScore.score
+    }\n`;
+  });
+  alert(highScoresMessage);
+  stop('timer');
   clearInterval(intervalId);
 }
 
@@ -44,9 +52,11 @@ function startTimer() {
         secondsLeft / 1000
       )}`;
     } else {
-      clearInterval(intervalId);
       gameOver = true;
       displayGameOver();
+
+      stop('timer');
+      clearInterval(intervalId);
     }
   }, 1000);
   obstacles.forEach(obstacle => {
@@ -59,9 +69,10 @@ function startTimer() {
       ghost.y < obstacle.y + obstacle.height &&
       ghost.y + 50 > obstacle.y
     ) {
-      clearInterval(intervalId);
       gameOver = true;
       displayGameOver();
+      clearInterval(intervalId);
+      stop('timer');
     }
   });
 }
@@ -148,8 +159,9 @@ backgroundImage.addEventListener('load', () => {
       y < ghost.y + ghost.height &&
       y + Obstacle.height > ghost.y &&
       Obstacle.x > 100 &&
-      Obstacle.x < 750 &&
-      Obstacle.y < 550
+      Obstacle.x < 550 &&
+      Obstacle.y < 530 &&
+      Obstacle.y > 5
     );
 
     obstacles.push(new Obstacle(x, y));
@@ -165,8 +177,8 @@ backgroundImage.addEventListener('load', () => {
       y < ghost.y + ghost.height &&
       y + AmmoBox.height > ghost.y &&
       AmmoBox.x > 100 &&
-      AmmoBox.x < 750 &&
-      AmmoBox.y < 550
+      AmmoBox.x < 650 &&
+      AmmoBox.y < canvas.width
     );
 
     ammoBoxes.push(new AmmoBox(x, y));
